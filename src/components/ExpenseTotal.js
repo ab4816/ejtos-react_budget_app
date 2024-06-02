@@ -10,7 +10,10 @@ const ExpenseTotal = () => {
   });
   return (
     <div className="alert alert-primary">
-      <span>Spent so far: ${ex}</span>
+      <span>
+        Spent so far: {context.currency}
+        {ex}
+      </span>
     </div>
   );
 };

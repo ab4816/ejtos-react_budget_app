@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 
 const AllocationForm = (props) => {
-  const { dispatch } = useContext(AppContext);
+  const { dispatch, currency, remaining } = useContext(AppContext);
 
   const [name, setName] = useState("");
   const [cost, setCost] = useState(0);
@@ -12,6 +12,9 @@ const AllocationForm = (props) => {
     const temp = { cost: parseInt(cost), name: name };
     switch (action) {
       case "Add":
+        if (temp.cost > remaining) {
+          alert(`Value cannot exceed remaining funds: ${currency}${remaining}`);
+        }
         dispatch({
           type: "ADD_EXPENSE",
           payload: temp,
@@ -25,6 +28,10 @@ const AllocationForm = (props) => {
         break;
       default:
     }
+  };
+
+  const handleCost = (e) => {
+    setCost(e.target.value);
   };
 
   return (
@@ -78,15 +85,26 @@ const AllocationForm = (props) => {
               Reduce
             </option>
           </select>
+
+          <label
+            style={{
+              marginLeft: "2rem",
+              marginTop: "5px",
+              marginRight: "2px",
+              fontSize: "20px",
+            }}
+          >
+            {currency}
+          </label>
           <input
             required="required"
             type="number"
             id="cost"
-            step="10"
             value={cost}
-            style={{ marginLeft: "2rem", size: 10 }}
-            onChange={(e) => setCost(e.target.value)}
+            style={{ size: 10 }}
+            onChange={handleCost}
           />
+
           <button
             className="btn btn-primary"
             style={{ marginLeft: "2rem" }}
